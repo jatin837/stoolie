@@ -1,7 +1,7 @@
-fn main() {
-    println!("initial commit");
-}
+use std::env;
+//use std::fs;
 
-fn parse_file() {
-    // input file has to be parsed and //issue must be captured
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    println!("{:?}", args);
 }
