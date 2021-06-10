@@ -8,12 +8,15 @@ fn main() {
 
     let filename: &String = &args[1];
     let filepath: &Path = Path::new(filename);
-    let absFilePath = PathAbs::new(filepath);
+    let abs_file_path = PathAbs::new(filepath);
+    match abs_file_path {
+        Ok(v) => println!("absolute path is {:?}", v),
+        Err(e) => println!("error {:?}", e)
+    }
     
     // get absolute path of filename
     println!("{:?}", filepath);
     println!("{:?}", filename);
-    println!("{:?}", absFilePath);
 
    
 }
