@@ -11,9 +11,13 @@ fn main() {
     match abs_file_path {
         Ok(v) => {
             let filepath:&Path = Path::new(&v);
-            println!("{:?}", filepath);
+            let is_exist: bool = filepath.exists();
+            if is_exist {
+                println!("{:?}", filepath);
+            } else {
+                println!("No such file exists right now")
+            }
         },
         Err(e) => println!("error {:?}", e)
     }
-    println!("{:?}", filename);
 }
