@@ -106,6 +106,7 @@ name = "stoolie"
 version = "0.1.0"
 dependencies = [
  "path_abs",
+ "regex",
 ]
 
 [[package]]
