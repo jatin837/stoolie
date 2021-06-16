@@ -6,8 +6,8 @@ use std::io::Read;
 use regex::Regex;
 
 fn main() {
-    let re = Regex::new(r" *-*TODO-*\n([a-zA-Z1-9 ]*)").unwrap();
     let args: Vec<String> = env::args().collect();
+    let re = Regex::new(r" *-*TODO-*\n([a-zA-Z1-9 ]*)").unwrap();
 
     let filename: &String = &args[1];
     
