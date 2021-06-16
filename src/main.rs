@@ -25,7 +25,14 @@ fn main() {
                 for cap in re.captures_iter(&contents) {
                     println!("Issues are : {}", &cap[0]);
                 }
-                println!("contents of file are :::  {:?}", contents);
+                println!("--------------------");
+                println!("--------------------");
+                println!("--------------------");
+                println!("--------------------");
+                print!("contents of file are :::  {:?}", contents);
+                println!("--------------------");
+                println!("--------------------");
+                println!("--------------------");
 
             } else {
                 println!("No such file exists right now")
