@@ -11,33 +11,29 @@ fn main() {
 
     let filename: &String = &args[1];
     
-    let abs_file_path = PathAbs::new(filename);
-    match abs_file_path {
-        Ok(v) => {
-            let filepath:&Path = Path::new(&v);
-            let is_exist: bool = filepath.exists();
-            if is_exist {
-                println!("{:?}", filepath);
-                let mut file = File::open(filepath).expect("Unable To open the file");
-                let mut contents = String::new();
+    let abs_file_path = PathAbs::new(filename).unwrap();
+    let filepath:&Path = Path::new(&abs_file_path);
 
-                file.read_to_string(&mut contents).expect("can not read file contents");
-                for cap in re.captures_iter(&contents) {
-                    println!("Issues are : {}", &cap[0]);
-                }
-                println!("--------------------");
-                println!("--------------------");
-                println!("--------------------");
-                println!("--------------------");
-                print!("contents of file are :::  {:?}", contents);
-                println!("--------------------");
-                println!("--------------------");
-                println!("--------------------");
-
-            } else {
-                println!("No such file exists right now")
-            }
-        },
-        Err(e) => println!("error {:?}", e)
+    if !filepath.exists() {
+        panic!("File does not exist")
     }
+
+    println!("{:?}", filepath);
+
+    let mut file = File::open(filepath).expect("Unable To open the file");
+    let mut contents = String::new();
+
+    file.read_to_string(&mut contents).expect("can not read file contents");
+    for cap in re.captures_iter(&contents) {
+        println!("Issues are : {}", &cap[0]);
+    }
+    println!("--------------------");
+    println!("--------------------");
+    println!("--------------------");
+    println!("--------------------");
+    print!("contents of file are :::  {:?}", contents);
+    println!("--------------------");
+    println!("--------------------");
+    println!("--------------------");
+
 }
