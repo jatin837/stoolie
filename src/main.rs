@@ -4,12 +4,20 @@ use path_abs::PathAbs;
 use std::fs::File;
 use std::io::Read;
 use regex::Regex;
+struct Issue {
+    heading: String,
+    status: Status,
+}
+enum Status {
+    Posted,
+    Idle,
+}
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let mut issues_list:Vec<String> = Vec::new();
+    let mut issues:Vec<Issue> = Vec::new();
 
-    let re = Regex::new(r" *-*TODO-*\n([a-zA-Z1-9 ]*)").unwrap();
+    let re = Regex::new(r" *-*TODO-*([a-zA-Z1-9 ]*)").unwrap();
 
     let filename: &String = &args[1];
     
@@ -27,10 +35,15 @@ fn main() {
 
     file.read_to_string(&mut contents).expect("can not read file contents");
     for cap in re.captures_iter(&contents) {
-        println!("Issues are : {}", &cap[0]);
-        issues_list.push(String::from(&cap[0]))
+        issues.push(Issue{
+            heading: String::from(&cap[0]),
+            status: Status::Idle,
+        })
     }
-    print!("contents of file are :::  {:?}", contents);
+
+    for issue in issues{
+        println!("--{}--", issue.heading)
+    }
     println!("DONE STORED IN ISSUES_LIST");
 
 }
