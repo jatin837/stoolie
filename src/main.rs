@@ -1,16 +1,36 @@
 use std::env;
+use std::str;
 use std::path::Path;
 use path_abs::PathAbs;
 use std::fs::File;
 use std::io::Read;
 use regex::Regex;
+//use hex_literal::hex;
+use sha2::{
+    Sha256,
+    Digest,
+};
+
 struct Issue {
     heading: String,
     status: Status,
+    digest: String,
 }
 enum Status {
     Posted,
     Idle,
+}
+
+fn hash(issue: String) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(issue.as_bytes());
+    let result = hasher.finalize();
+    let mut ret_res:Vec<char> = Vec::new();
+    for c in result{
+        ret_res.push(c as char)
+    }
+    let res: String = ret_res.into_iter().collect();
+    res
 }
 
 fn main() {
@@ -38,11 +58,12 @@ fn main() {
         issues.push(Issue{
             heading: String::from(&cap[0]),
             status: Status::Idle,
+            digest: hash(String::from(&cap[0]))
         })
     }
 
     for issue in issues{
-        println!("--{}--", issue.heading)
+        println!("--{}--{}--", issue.heading, issue.digest)
     }
     println!("DONE STORED IN ISSUES_LIST");
 
