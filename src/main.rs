@@ -16,6 +16,26 @@ struct Issue {
     status: Status,
     digest: String,
 }
+
+impl Issue {
+    fn post_issue(idle: Vec<Issue>){
+        //post idle issues to github
+    }
+}
+
+struct Issues {
+    list: Vec<Issue>,
+}
+
+impl Issues {
+    fn new(mut self) -> Self {
+       // init empty list 
+    }
+    fn load_issues() {
+       //load unposted issues from .ISSUES file 
+    }
+}
+
 enum Status {
     Posted,
     Idle,
@@ -32,6 +52,20 @@ fn hash(issue: String) -> String {
     let res: String = ret_res.into_iter().collect();
     res
 }
+
+struct User {
+    name: String,
+    access_token: String,
+    email: String,
+}
+
+fn load_config() -> Vec<&String> {
+    //read file from ~/.config/stoolie/stoolie.yml
+    //grap access_token, name, email and other relevent info about user
+    //store them into User struct
+}
+
+
 
 fn main() {
     let args: Vec<String> = env::args().collect();
