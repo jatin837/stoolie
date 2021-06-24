@@ -28,11 +28,13 @@ struct Issues {
 }
 
 impl Issues {
-    fn new(mut self) -> Self {
-       // init empty list 
+    fn new() -> Vec<Issue> {
+        let iss: Vec<Issue> = Vec::new();
+        iss
     }
     fn load_issues() {
        //load unposted issues from .ISSUES file 
+       todo!()
     }
 }
 
@@ -59,22 +61,27 @@ struct User {
     email: String,
 }
 
-fn load_config() -> Vec<&String> {
+fn load_config() -> Vec<String> {
     //read file from ~/.config/stoolie/stoolie.yml
     //grap access_token, name, email and other relevent info about user
     //store them into User struct
+    todo!()
 }
 
 
+fn read_args() -> Vec<String> {
+    let args: Vec<String> = env::args().collect();
+    args
+}
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let mut issues:Vec<Issue> = Vec::new();
+    let args = read_args();
+    let mut issues:Vec<Issue> = Issues::new();
+    
 
     let re = Regex::new(r" *-*TODO-*([a-zA-Z1-9 ]*)").unwrap();
 
     let filename: &String = &args[1];
-    
     let abs_file_path = PathAbs::new(filename).unwrap();
     let filepath:&Path = Path::new(&abs_file_path);
 
