@@ -11,6 +11,23 @@ use sha2::{
     Digest,
 };
 
+// (file path) => |my function name| => (string fromm that file)
+
+fn string_from_file(fpath: &String) -> String {
+    let rel_path: &Path = Path::new(fpath);
+    let abs_file_path = PathAbs::new(rel_path).unwrap();
+    let filepath:&Path = Path::new(&abs_file_path);
+    if !filepath.exists() {
+        panic!("File does not exist")
+    }
+
+    let mut file = File::open(filepath).expect("Unable To open the file");
+    let mut contents = String::new();
+
+    file.read_to_string(&mut contents).expect("can not read file contents");
+    contents
+}
+
 struct Issue {
     heading: String,
     status: Status,
@@ -81,20 +98,8 @@ fn main() {
 
     let re = Regex::new(r" *-*TODO-*([a-zA-Z1-9 ]*)").unwrap();
 
-    let filename: &String = &args[1];
-    let abs_file_path = PathAbs::new(filename).unwrap();
-    let filepath:&Path = Path::new(&abs_file_path);
+    let contents = string_from_file(&args[1]);
 
-    if !filepath.exists() {
-        panic!("File does not exist")
-    }
-
-    println!("{:?}", filepath);
-
-    let mut file = File::open(filepath).expect("Unable To open the file");
-    let mut contents = String::new();
-
-    file.read_to_string(&mut contents).expect("can not read file contents");
     for cap in re.captures_iter(&contents) {
         issues.push(Issue{
             heading: String::from(&cap[0]),
