@@ -14,6 +14,7 @@ use sha2::{
     Sha256,
     Digest,
 };
+use yaml_rust::{YamlLoader, Yaml};
 
 // (file path) => |my function name| => (string fromm that file)
 
@@ -32,11 +33,12 @@ fn string_from_file(fpath: &String) -> String {
     contents
 }
 
-fn parse_yaml(fpath: &String) -> () {
+fn parse_yaml(fpath: &String) -> Vec<Yaml> {
     //open that file
     let contents: &String = &read_to_string(fpath).expect("can not read the file");
-    print!("{}", contents)
     //read it's contents into a string
+    let docs = YamlLoader::load_from_str(contents).unwrap();
+    docs
     //parse that to hasmap using yaml lib
     //return that hashmap
 }
@@ -119,9 +121,10 @@ fn main() {
             digest: hash(String::from(&cap[0]))
         })
     }
+    let test_config: &String = &String::from("test.yaml");
+    let configs: Vec<Yaml> = parse_yaml(test_config);
 
-    parse_yaml(&String::from("test.yaml"));
-
+    
     for issue in issues{
         println!("--{}--{}--", issue.heading, issue.digest)
     }
