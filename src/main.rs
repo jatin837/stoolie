@@ -2,9 +2,13 @@ use std::env;
 use std::str;
 use std::path::Path;
 use path_abs::PathAbs;
-use std::fs::File;
+use std::fs::{
+    File, 
+    read_to_string,
+};
 use std::io::Read;
 use regex::Regex;
+//use std::collections::HashMap;
 //use hex_literal::hex;
 use sha2::{
     Sha256,
@@ -26,6 +30,15 @@ fn string_from_file(fpath: &String) -> String {
 
     file.read_to_string(&mut contents).expect("can not read file contents");
     contents
+}
+
+fn parse_yaml(fpath: &String) -> () {
+    //open that file
+    let contents: &String = &read_to_string(fpath).expect("can not read the file");
+    print!("{}", contents)
+    //read it's contents into a string
+    //parse that to hasmap using yaml lib
+    //return that hashmap
 }
 
 struct Issue {
@@ -94,9 +107,8 @@ fn read_args() -> Vec<String> {
 fn main() {
     let args = read_args();
     let mut issues:Vec<Issue> = Issues::new();
-    
 
-    let re = Regex::new(r" *-*TODO-*([a-zA-Z1-9 ]*)").unwrap();
+    let re = Regex::new(r" *-*TODO-*([a-zA-Z1-9 ]*)").expect("you fuckin meet head");
 
     let contents = string_from_file(&args[1]);
 
@@ -107,6 +119,8 @@ fn main() {
             digest: hash(String::from(&cap[0]))
         })
     }
+
+    parse_yaml(&String::from("test.yaml"));
 
     for issue in issues{
         println!("--{}--{}--", issue.heading, issue.digest)
