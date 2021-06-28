@@ -1,116 +1,38 @@
-use std::env;
-use std::str;
-use std::path::Path;
-use path_abs::PathAbs;
-use std::fs::File;
-use std::io::Read;
-use regex::Regex;
-//use hex_literal::hex;
-use sha2::{
-    Sha256,
-    Digest,
-};
-
-// (file path) => |my function name| => (string fromm that file)
-
-fn string_from_file(fpath: &String) -> String {
-    let rel_path: &Path = Path::new(fpath);
-    let abs_file_path = PathAbs::new(rel_path).unwrap();
-    let filepath:&Path = Path::new(&abs_file_path);
-    if !filepath.exists() {
-        panic!("File does not exist")
-    }
-
-    let mut file = File::open(filepath).expect("Unable To open the file");
-    let mut contents = String::new();
-
-    file.read_to_string(&mut contents).expect("can not read file contents");
-    contents
-}
-
-struct Issue {
-    heading: String,
-    status: Status,
-    digest: String,
-}
-
-impl Issue {
-    fn post_issue(idle: Vec<Issue>){
-        //post idle issues to github
-    }
-}
-
-struct Issues {
-    list: Vec<Issue>,
-}
-
-impl Issues {
-    fn new() -> Vec<Issue> {
-        let iss: Vec<Issue> = Vec::new();
-        iss
-    }
-    fn load_issues() {
-       //load unposted issues from .ISSUES file 
-       todo!()
-    }
-}
-
-enum Status {
-    Posted,
-    Idle,
-}
-
-fn hash(issue: String) -> String {
-    let mut hasher = Sha256::new();
-    hasher.update(issue.as_bytes());
-    let result = hasher.finalize();
-    let mut ret_res:Vec<char> = Vec::new();
-    for c in result{
-        ret_res.push(c as char)
-    }
-    let res: String = ret_res.into_iter().collect();
-    res
-}
-
-struct User {
-    name: String,
-    access_token: String,
-    email: String,
-}
-
-fn load_config() -> Vec<String> {
-    //read file from ~/.config/stoolie/stoolie.yml
-    //grap access_token, name, email and other relevent info about user
-    //store them into User struct
-    todo!()
-}
-
-
-fn read_args() -> Vec<String> {
-    let args: Vec<String> = env::args().collect();
-    args
-}
+extern crate yaml_rust;
+use yaml_rust::{YamlLoader, YamlEmitter};
 
 fn main() {
-    let args = read_args();
-    let mut issues:Vec<Issue> = Issues::new();
-    
+    let s =
+"
+foo:
+    - list1
+    - list2
+bar:
+    - 1
+    - 2.0
+";
+    let docs = YamlLoader::load_from_str(s).unwrap();
 
-    let re = Regex::new(r" *-*TODO-*([a-zA-Z1-9 ]*)").unwrap();
+    // Multi document support, doc is a yaml::Yaml
+    let doc = &docs[0];
 
-    let contents = string_from_file(&args[1]);
+    // Debug support
+    println!("{:?}", doc);
 
-    for cap in re.captures_iter(&contents) {
-        issues.push(Issue{
-            heading: String::from(&cap[0]),
-            status: Status::Idle,
-            digest: hash(String::from(&cap[0]))
-        })
+    // Index access for map & array
+    assert_eq!(doc["foo"][0].as_str().unwrap(), "list1");
+    assert_eq!(doc["bar"][1].as_f64().unwrap(), 2.0);
+
+    // Chained key/array access is checked and won't panic,
+    // return BadValue if they are not exist.
+    assert!(doc["INVALID_KEY"][100].is_badvalue());
+
+    // Dump the YAML object
+    let mut out_str = String::new();
+    {
+        let mut emitter = YamlEmitter::new(&mut out_str);
+        emitter.dump(doc).unwrap(); // dump the YAML object to a String
     }
-
-    for issue in issues{
-        println!("--{}--{}--", issue.heading, issue.digest)
-    }
-    println!("DONE STORED IN ISSUES_LIST");
-
+    println!("{}", out_str);
 }
+
