@@ -93,8 +93,10 @@ fn load_config() -> () {
 
     let test_config: &String = &String::from("test.yaml");
     let configs: Vec<Yaml> = parse_yaml(test_config);
-    let a = &configs[0]["user"];
-    println!("{:?}", a);
+    let name: &str = configs[0]["user"][0].as_str().expect("something wrong");
+    let email: &str = configs[0]["user"][1].as_str().expect("something wrong");
+    let acces_token: &str = configs[0]["user"][2].as_str().expect("something wrong");
+    println!("name -> {:?}, email -> {:?}, access_token -> {:?}", name, email, acces_token);
 }
 
 
