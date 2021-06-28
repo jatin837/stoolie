@@ -89,11 +89,12 @@ struct User {
     email: String,
 }
 
-fn load_config() -> Vec<String> {
-    //read file from ~/.config/stoolie/stoolie.yml
-    //grap access_token, name, email and other relevent info about user
-    //store them into User struct
-    todo!()
+fn load_config() -> () {
+
+    let test_config: &String = &String::from("test.yaml");
+    let configs: Vec<Yaml> = parse_yaml(test_config);
+    let a = &configs[0]["user"];
+    println!("{:?}", a);
 }
 
 
@@ -117,8 +118,8 @@ fn main() {
             digest: hash(String::from(&cap[0]))
         })
     }
-    let test_config: &String = &String::from("test.yaml");
-    let configs: Vec<Yaml> = parse_yaml(test_config);
+
+    load_config();
 
     
     for issue in issues{
