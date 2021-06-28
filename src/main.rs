@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-//why it's showing already up to date?
-=======
 use std::env;
 use std::str;
 use std::path::Path;
@@ -130,4 +127,3 @@ fn main() {
     println!("DONE STORED IN ISSUES_LIST");
 
 }
->>>>>>> old
