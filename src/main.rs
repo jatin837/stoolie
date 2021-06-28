@@ -34,13 +34,9 @@ fn string_from_file(fpath: &String) -> String {
 }
 
 fn parse_yaml(fpath: &String) -> Vec<Yaml> {
-    //open that file
     let contents: &String = &read_to_string(fpath).expect("can not read the file");
-    //read it's contents into a string
     let docs = YamlLoader::load_from_str(contents).unwrap();
     docs
-    //parse that to hasmap using yaml lib
-    //return that hashmap
 }
 
 struct Issue {
