@@ -1,12 +1,11 @@
 use path_abs::PathAbs;
 use regex::Regex;
+use sha2::{Digest, Sha256};
 use std::env;
 use std::fs::{read_to_string, File};
 use std::io::Read;
 use std::path::Path;
-use sha2::{Digest, Sha256};
 use yaml_rust::{Yaml, YamlLoader};
-
 
 fn string_from_file(fpath: &String) -> String {
     let rel_path: &Path = Path::new(fpath);
@@ -48,12 +47,14 @@ struct Issues {
 
 impl Issues {
     fn new() -> Vec<Issue> {
-        let iss: Vec<Issue> = Vec::new();
-        iss
+        Vec::new()
     }
     fn load_issues() {
+        // .ISSUE format
+        // \tISSUE_HASH\tISSUE_DISCRIPTION\tISSUE_STATUS
         //load unposted issues from .ISSUES file
-        todo!()
+        //  \[([0-9a-f]*)\] \[((\w*| )*)\] \[(P|U)\]/g
+        let contents = string_from_file(&"./.ISSUES".to_string());
     }
 }
 
