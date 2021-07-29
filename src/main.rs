@@ -36,6 +36,19 @@ struct Issue {
 }
 
 impl Issue {
+    fn new(desc: String, status: char) -> Issue {
+        let temp_status;
+        if status == 'P' {
+            temp_status = Status::Posted;
+        } else {
+            temp_status = Status::Idle
+        }
+        Issue {
+            heading: desc.clone(),
+            status: temp_status,
+            digest: hash(desc),
+        }
+    }
     fn post_issue(idle: Vec<Issue>) {
         //post idle issues to github
     }
@@ -119,7 +132,7 @@ fn main() {
     }
 
     let mut issues: Vec<Issue> = Issues::new();
-    let re = Regex::new(r" *-*TODO-*([a-zA-Z1-9 ]*)").expect("you fuckin meet head");
+    let re = Regex::new(r"[TODO\]\{\{([a-zA-Z 0-9',]*)\}\}").expect("you fuckin meet head");
     let contents = string_from_file(&args[1]);
     for cap in re.captures_iter(&contents) {
         issues.push(Issue {
