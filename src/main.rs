@@ -4,13 +4,9 @@ use std::env;
 use std::fs::{read_to_string, File};
 use std::io::Read;
 use std::path::Path;
-use std::str;
-//use std::collections::HashMap;
-//use hex_literal::hex;
 use sha2::{Digest, Sha256};
 use yaml_rust::{Yaml, YamlLoader};
 
-// (file path) => |my function name| => (string fromm that file)
 
 fn string_from_file(fpath: &String) -> String {
     let rel_path: &Path = Path::new(fpath);
@@ -118,8 +114,7 @@ fn main() {
     let args = read_args();
 
     if args.len() == 1 {
-        println!("NEED AN ARGUMENT");
-        std::process::exit(1);
+        panic!("NEED AN ARGUMENT");
     }
 
     let mut issues: Vec<Issue> = Issues::new();
