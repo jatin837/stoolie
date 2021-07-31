@@ -7,6 +7,10 @@ use std::io::Read;
 use std::path::Path;
 use yaml_rust::{Yaml, YamlLoader};
 
+fn preprocess(text: String) -> String {
+    todo!();
+}
+
 fn string_from_file(fpath: &String) -> String {
     let rel_path: &Path = Path::new(fpath);
     let abs_file_path = PathAbs::new(rel_path).unwrap();
@@ -76,9 +80,9 @@ enum Status {
     Idle,
 }
 
-fn hash(issue: String) -> String {
+fn hash(text: String) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(issue.as_bytes());
+    hasher.update(text.as_bytes());
     let result = hasher.finalize();
     let mut ret_res: Vec<char> = Vec::new();
     for c in result {
